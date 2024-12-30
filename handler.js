@@ -1,3 +1,4 @@
+ import { smsg } from './lib/simple.js'
 import { format } from 'util' 
 import { fileURLToPath } from 'url'
 import path, { join } from 'path'
@@ -147,6 +148,7 @@ export async function handler(chatUpdate) {
                     chat.captcha = false
                 if (!('nsfw' in chat))
                     chat.nsfw = false
+                if (!('modoadmin' in chat)) chat.modoadmin = false
                 if (!isNumber(chat.expired))
                     chat.expired = 0
                  if (!('rules' in chat))
@@ -166,6 +168,7 @@ export async function handler(chatUpdate) {
                     useDocument: true,
                     captcha: false,
                     nsfw: false, 
+                    modoadmin: false,
                     expired: 0,
                     rules: '',
                 }
@@ -511,8 +514,8 @@ export async function participantsUpdate({ id, participants, action }) {
                 for (let user of participants) {
                     //let welimg = fs.readFileSync('./src/Welcome_logo.jpg')
                    // let byeimg = fs.readFileSync('./src/Leave_logo.jpg')
-                    let welimg = await (await fetch('https://files.catbox.moe/isrhhn.jpg')).buffer()
-                    let byeimg = await (await fetch('https://files.catbox.moe/0ooncl.jpg')).buffer()
+                    let welimg = await (await fetch('https://telegra.ph/file/e5acfc6db7e9286bf9c01.jpg')).buffer()
+                    let byeimg = await (await fetch('https://telegra.ph/file/f2c371a30f593755851db.jpg')).buffer()
 
                    // try {
 
@@ -528,9 +531,9 @@ this.sendMessage(id, {
                         showAdAttribution: true,
                         //sourceUrl: '',
                         mediaType: 1,
-                        description: `La bot Más Linda de WhatsApp 🌸`,
-                        title: `Gracias por Usar JyHyun Bot MultiDevice 🤗.`,
-                        body: `Powered by Jose`,          
+                        description: `🍁 This bot is still in development.`,
+                        title: `🌺 Thank you for using Sylphiette, the best WhatsApp bot.`,
+                        body: `💐 Developed by I\`m Fz ~`,          
                         previewType: 0,
                         thumbnail: imagen,
                         mediaUrl: insta,
