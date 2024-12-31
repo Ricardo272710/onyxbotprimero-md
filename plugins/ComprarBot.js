@@ -5,11 +5,7 @@ handler.command = /^(ComprarBot|Comprar|comprar|ComprarBot)$/i;
 export default handler;
 
 global.ComprarBot = `
-〔 Spider 𝗕𝗼𝘁 🐉 〕
+\𝒏`𝑭𝑵 𝑩𝑶𝑻l ꙰❦`
 
 HABLAR AL :
-wa.me/593979133620
-
-HABLAR AL :
-wa.me/50764206082
-`;
+wa.me/593979133620`;
