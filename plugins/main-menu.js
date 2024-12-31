@@ -237,7 +237,7 @@ mentionedJid: conn.parseMention(text.trim()),
 isForwarded: true,
 forwardingScore: 999,
 externalAdReply: {
-title: conn.getName(m.sender) + 'EL MEJOR B0T DE FF BY RICARDO',
+title: conn.getName(m.sender) + ', EL MEJOR BOT DE FF BY RICARDO',
 body: author,
 thumbnailUrl: 'https://qu.ax/YGgNn.jpg',
 sourceUrl: insta,
