@@ -1,4 +1,4 @@
- import { smsg } from './lib/simple.js'
+import { smsg } from './lib/simple.js'
 import { format } from 'util' 
 import { fileURLToPath } from 'url'
 import path, { join } from 'path'
@@ -532,8 +532,8 @@ this.sendMessage(id, {
                         //sourceUrl: '',
                         mediaType: 1,
                         description: `🍁 This bot is still in development.`,
-                        title: `🌺 Thank you for using Sylphiette, the best WhatsApp bot.`,
-                        body: `💐 Developed by I\`m Fz ~`,          
+                        title: `🌺 Thank you for using MeliodasBot, Cursed Bot  WhatsApp bot.`,
+                        body: `💐 Developed by Jampier207`,          
                         previewType: 0,
                         thumbnail: imagen,
                         mediaUrl: insta,
@@ -634,4 +634,4 @@ watchFile(file, async () => {
     unwatchFile(file)
     console.log(chalk.magenta("✅  Se actualizo 'handler.js'"))
     if (global.reloadHandler) console.log(await global.reloadHandler())
-}) 
+})
