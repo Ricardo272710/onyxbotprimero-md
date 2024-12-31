@@ -237,7 +237,7 @@ mentionedJid: conn.parseMention(text.trim()),
 isForwarded: true,
 forwardingScore: 999,
 externalAdReply: {
-title: conn.getName(m.sender) + ', Thanks for using Sylphiette, you can follow me on Instagram by clicking here.',
+title: conn.getName(m.sender) + 'EL MEJOR B0T DE FF BY RICARDO',
 body: author,
 thumbnailUrl: 'https://qu.ax/YGgNn.jpg',
 sourceUrl: insta,
