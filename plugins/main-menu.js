@@ -231,7 +231,7 @@ FN BOT
     
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
     
-conn.sendMessage(m.chat, { video: { url: `` }, gifPlayback: true, caption: text.trim(),
+conn.sendMessage(m.chat, { video: { url: `https://qu.ax/YGgNn.jpg` }, gifPlayback: true, caption: text.trim(),
 contextInfo: {
 mentionedJid: conn.parseMention(text.trim()),
 isForwarded: true,
@@ -239,7 +239,7 @@ forwardingScore: 999,
 externalAdReply: {
 title: conn.getName(m.sender) + ', Thanks for using Sylphiette, you can follow me on Instagram by clicking here.',
 body: author,
-thumbnailUrl: '',
+thumbnailUrl: 'https://qu.ax/YGgNn.jpg',
 sourceUrl: insta,
 mediaType: 1,
 renderLargerThumbnail: true
