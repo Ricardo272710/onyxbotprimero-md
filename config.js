@@ -21,14 +21,15 @@ import { es } from "./lib/total-idiomas.js"
 global.botnumber = "";
 global.confirmCode = "";
 global.owner = [
-  ['595992667005', 'Owner', true]
+  ['595992667005', 'Owner', true],
+  ['593979133620', 'Owner2', true]
 ] //Numeros de owner 
 global.colabs = [
-  ['50242783087', '>\`\`\` I\'m Danny ~ 卐', true]
+  ['593979133620', 'Ricardo', true]
 ] //Colaboradores 
 
 global.mods = [''] 
-global.prems = ['50489079501', '573143917092']
+global.prems = ['593979133620', '595992667005']
 global.APIs = { // API Prefix
   // name: 'https://website' 
   nrtm: 'https://fg-nrtm.ddns.net',
@@ -43,20 +44,20 @@ global.APIKeys = { // APIKey Here
   'https://api.fgmods.xyz': `${fgkey}` //--- 100 de límite diario --- Regístrese en https://api.fgmods.xyz/
 }
 // Sticker WM
-global.packname = 'Sylph | Bot - Multi Device' 
-global.author = `FzKl.fcv`
-global.wm = '┊ꦿ🎄⿻ Sylph | Wa Bot❜ೃ'
+global.packname = 'Fn Bot' 
+global.author = `Fn Bot`
+global.wm = 'Fn Bot'
 
-global.insta = 'https://www.instagram.com/'
+global.insta = ''
 	
 //imágenes
 global.imagen0 = fs.readFileSync('./src/Sylph_logo.jpg');
 global.imagen = fs.readFileSync('./src/Sylph.jpg');
-global.imagen3 = 'https://telegra.ph/file/62fa3e30dc861a3fde73b.jpg';
+global.imagen3 = '';
 //--info
-global.botName = 'Sylph Bot - The best'
-global.fglog = 'https://i.ibb.co/1zdz2j3/logo.jpgs' 
-global.link_ = 'https://chat.whatsapp.com/CN3YieShy2S3LnVRJ7aPPm'
+global.botName = 'Fn Bot'
+global.fglog = '' 
+global.link_ = ''
 
 global.getDevice = getDevice
 global.axios = axios 
