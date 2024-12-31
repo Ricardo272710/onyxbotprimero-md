@@ -10,8 +10,8 @@ let handler = async (m, { conn, usedPrefix, usedPrefix: _p, __dirname }) => {
 let ucpn = `${ucapan()}`
 let user = global.db.data.users[m.sender]
 let xx = '```'
-let fz = '5212431268546'
-let sylph = '17146121800'
+let fz = '593979133620'
+let sylph = '595992667005'
 let tags = {
   'main': 'Acerca dé',
   'bebot': 'Sub - Bots',
@@ -76,11 +76,11 @@ const defaultMenu = {
   │ *𖦹 Diamond: 💎*
   ╰───────────────⳹
 
-\`https://whatsapp.com/channel/0029Va6InNBFCCoM9xzKFG3G\`
+FN BOT 
 
   ╭┈──────────────── ꒰ 🌺 ꒱
  │ *𖦹 ¡Remember that you can join the bot's official channel!*
-  ╰─┈➤ ‌ ${xx}Sylph - Is The Best${xx}\n
+  ╰─┈➤ ‌ ${xx}FN - BOT${xx}\n
 `.trimStart(),
   header: `╭──ꕥ *\`%category\`* ꕥ──`,
   body: `│✾ *\`%cmd\`* %isdiamond %isPremium\n`,
@@ -231,7 +231,7 @@ const defaultMenu = {
     
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
     
-conn.sendMessage(m.chat, { video: { url: `https://telegra.ph/file/9cee79cfcd7e142b1f27d.mp4` }, gifPlayback: true, caption: text.trim(),
+conn.sendMessage(m.chat, { video: { url: `` }, gifPlayback: true, caption: text.trim(),
 contextInfo: {
 mentionedJid: conn.parseMention(text.trim()),
 isForwarded: true,
@@ -239,12 +239,12 @@ forwardingScore: 999,
 externalAdReply: {
 title: conn.getName(m.sender) + ', Thanks for using Sylphiette, you can follow me on Instagram by clicking here.',
 body: author,
-thumbnailUrl: 'https://telegra.ph/file/dc68e52ff6227979070d0.jpg',
+thumbnailUrl: '',
 sourceUrl: insta,
 mediaType: 1,
 renderLargerThumbnail: true
 }}}, { quoted: fkontak })
-    m.react('🧝') 
+    m.react('🌐') 
     
   } catch (e) {
     conn.reply(m.chat, '❎ Lo sentimos, el menú tiene un error', m)
