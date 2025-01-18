@@ -1,49 +1,63 @@
-import axios from 'axios';
+import fetch from 'node-fetch';
 
-const handler = async (m, { conn, args }) => {
+let handler = async (m, { conn, text }) => {
+  if (!text) {
+    await m.react('✖️');
+    return conn.reply(m.chat, '🔥 Ingresa un enlace de YouTube.', m, rcanal);
+  }
+
+  const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+  if (!ytRegex.test(text)) {
+    await m.react('❌');
+    return conn.reply(m.chat, '🔥 Ingresa un enlace válido de YouTube.', m, rcanal);
+  }
+
   try {
-    const query = args[0];
-    if (!query) return m.reply('🤍 *Ejemplo:* .ytmp3 <URL de YouTube>');
+    await m.react('🕒');
 
-    // Notificar al usuario que se está obteniendo el audio
-    await m.reply('🔍 *Obteniendo detalles del audio...*');
+    let videoId = text.split('v=')[1]?.split('&')[0] || text.split('/').pop();
+    let apiURL = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
 
-    // URL de la API para descargar el audio
-    const apiUrl = `https://api.davidcyriltech.my.id/download/ytmp3?url=${encodeURIComponent(query)}`;
-    const response = await axios.get(apiUrl);
+    let response = await fetch(apiURL);
+    if (!response.ok) throw new Error('No se pudo obtener información del video. Verifica la URL proporcionada.');
 
-    // Comprobar si los datos de respuesta contienen download_url
-    if (!response.data?.result?.download_url) {
-      return m.reply('🚫 *Error al obtener el audio.* Verifica la URL o intenta nuevamente más tarde.');
-    }
+    let videoData = await response.json();
 
-    // Extraer detalles del audio
-    const { title, quality, thumbnail, download_url } = response.data.result;
+    let ytData = {
+      url: text,
+      title: videoData.title || 'Sin título',
+      thumbnail: videoData.thumbnail_url || `https://img.youtube.com/vi/${videoId}/0.jpg`
+    };
 
-    // Preparar el texto para el documento de audio
-    const caption = `🔥 *\`Título:\`* ${title}
-🍁 *\`Calidad:\`* ${quality}
-🤍 *\`Miniatura:\`* ${thumbnail}`;
-
-    // Enviar el audio como un documento
     await conn.sendMessage(m.chat, {
-      document: { url: download_url },
-      fileName: `${title}.mp3`,
+      audio: {
+        url: `https://kepolu-ytdl.hf.space/yt/dl?url=${ytData.url}&type=audio`
+      },
       mimetype: 'audio/mpeg',
-      caption: caption,
+      contextInfo: {
+        externalAdReply: {
+          title: ytData.title,
+          body: 'zᥲmᥲs ᑲ᥆𝗍 ⍴᥆ᥕᥱrᥱძ ᑲᥡ ȷ᥆sᥱ',
+          mediaType: 2,
+          mediaUrl: ytData.url,
+          thumbnailUrl: ytData.thumbnail,
+          sourceUrl: ytData.url,
+          containsAutoReply: true,
+          renderLargerThumbnail: true,
+          showAdAttribution: false,
+        }
+      }
     }, { quoted: m });
 
-    // Notificar al usuario sobre la finalización exitosa
-    await m.reply('✅ *¡Audio enviado con éxito como documento!*');
-
+    await m.react('✅');
   } catch (error) {
-    console.error('Error en el comando ytmp3:', error.message);
-    m.reply('⚠️ *Ocurrió un error al procesar tu solicitud.* Por favor, intenta nuevamente más tarde.');
+    console.error(error);
+    await m.react('❌');
+    return conn.reply(m.chat, 'Ocurrió un error al intentar descargar el audio.', m);
   }
 };
 
-handler.help = ['go'];
-handler.tags = ['descargar'];
-handler.command = /^go|go$/i;
-
+handler.help = ['go *<url>*'];
+handler.command = ['go'];
+handler.tags = ['dl'];
 export default handler;
