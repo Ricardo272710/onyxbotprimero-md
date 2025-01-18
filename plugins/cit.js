@@ -1,99 +1,114 @@
+import axios from 'axios'
 import fetch from 'node-fetch'
-const handler = async (m, {conn, text, usedPrefix, command}) => {
-if (!text) return conn.reply(m.chat, `🚩 *Ingrese el nombre de un repositorio de github*\n\nEjemplo, ${usedPrefix + command} Ai-Yaemori`, m)
-try {
-await m.react(rwait)
-const res = await fetch(global.API('https://api.github.com', '/search/repositories', {
-q: text,
-}))
-const json = await res.json()
-if (res.status !== 200) throw json
-let str = json.items.map((repo, index) => {
-return `
-🍟 *Resultado:* ${1 + index}
-🔗 *Enlace:* ${repo.html_url}
-👑 *Creador:* ${repo.owner.login}
-🍟 *Nombre:* ${repo.name}
-🫂 *Creado:* ${formatDate(repo.created_at)}
-💥 *Actualizado:* ${formatDate(repo.updated_at)}
-👀 *Visitas:* ${repo.watchers}
-✨️ *Bifurcado:* ${repo.forks}
-🌟 *Estrellas:* ${repo.stargazers_count}
-🍂 *Issues:* ${repo.open_issues}
-🍭 *Descripción:* ${repo.description ? `${repo.description}` : 'Sin Descripción'}
-⭐️ *Clone:* ${repo.clone_url}
-`.trim()}).join('\n\n─────────────────\n\n') 
-// await m.react(done)
-let img = await (await fetch(json.items[0].owner.avatar_url)).buffer()
-await conn.sendMini(m.chat, '🍟 G I T H U B - S E A R C H 🍟', dev, str, img, img, redes, estilo)
-await m.react(done)
-} catch {
-await m.react(error)
-conn.reply(m.chat, '🚩 *No se encontró resultados de:* ' + text, m, fake)}}
-handler.help = ['cit']
-handler.tags = ['buscador']
-handler.command = ['cit']
-
-handler.register = true
-
-export default handler 
-
-function formatDate(n, locale = 'es') {
-const d = new Date(n)
-return d.toLocaleDateString(locale, {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'})}
-
-/*import MessageType from '@whiskeysockets/baileys'
-import fetch from 'node-fetch'
-import fs from 'fs'
-
-var handler = async (m, { conn, text, usedPrefix, command }) => {
-
-if (!text) return conn.reply(m.chat, `🚩 *Ingrese el nombre de un repositorio de github*\n\nEjemplo, ${usedPrefix + command} Ai-Yaemori`, m, rcanal)
-
-try {
-
-let res = await fetch(global.API('https://api.github.com', '/search/repositories', { q: text }))
-let json = await res.json()
-if (res.status !== 200) throw json
-let str = json.items.map((repo, index) => {
-return `
-🍟 *Resultado:* ${1 + index}
-🔗 *Enlace:* ${repo.html_url}
-👑 *Creador:* ${repo.owner.login}
-🍟 *Nombre:* ${repo.name}
-🫂 *Creado:* ${formatDate(repo.created_at)}
-💥 *Actualizado:* ${formatDate(repo.updated_at)}
-👀 *Visitas:* ${repo.watchers}
-✨️ *Bifurcado:* ${repo.forks}
-🌟 *Estrellas:* ${repo.stargazers_count}
-🍂 *Issues:* ${repo.open_issues}
-🍭 *Descripción:* ${repo.description ? `${repo.description}` : 'Sin Descripción'}
-⭐️ *Clone:* ${repo.clone_url}
-`.trim()}).join('\n\n─────────────────\n\n')
-
-let img = await (await fetch(json.items[0].owner.avatar_url)).buffer()
-await conn.sendUrl(m.chat, str, m, { externalAdReply: { mediaType: 1, renderLargerThumbnail: true, thumbnail: img, thumbnailUrl: img, title: 'Resultados Encontrados 🔎',
-}
+import { youtubedl, youtubedlv2 } from '@bochilteam/scraper'
+import search from 'yt-search'
+async function spotifyxv(query) {
+let token = await tokens();
+let response = await axios({
+method: 'get',
+url: 'https://api.spotify.com/v1/search?q=' + encodeURIComponent(query) + '&type=track',
+headers: {
+Authorization: 'Bearer ' + token,
+},
 })
-
-} catch {
-conn.reply(m.chat, '🚩 *Ocurrió un fallo*', m, fake)
+const tracks = response.data.tracks.items
+const results = tracks.map((track) => ({
+name: track.name,
+artista: track.artists.map((artist) => artist.name),
+album: track.album.name,
+duracion: timestamp(track.duration_ms),
+url: track.external_urls.spotify,
+imagen: track.album.images.length ? track.album.images[0].url : '',
+}))
+return results
 }
-
+async function tokens() {
+const response = await axios({
+method: 'post',
+url:
+'https://accounts.spotify.com/api/token',
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded',
+Authorization: 'Basic ' + Buffer.from('acc6302297e040aeb6e4ac1fbdfd62c3:0e8439a1280a43aba9a5bc0a16f3f009').toString('base64'),
+},
+data: 'grant_type=client_credentials',
+})
+return response.data.access_token
 }
-handler.help = ['githubsearch']
-handler.tags = ['buscador']
-handler.command = /^(githubsearch)$/i
+function timestamp(time) {
+const minutes = Math.floor(time / 60000);
+const seconds = Math.floor((time % 60000) / 1000);
+return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
+async function getBuffer(url, options) {
+try {
+options = options || {};
+const res = await axios({
+method: 'get',
+url,
+headers: {
+DNT: 1,
+'Upgrade-Insecure-Request': 1,
+},
+...options,
+responseType: 'arraybuffer',
+});
+return res.data;
+} catch (err) {
+return err;
+}}
+async function getTinyURL(text) {
+try {
+let response = await axios.get(`https://tinyurl.com/api-create.php?url=${text}`);
+return response.data;
+} catch (error) {
+return text;
+}}
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+if (!text) throw `╰⊱❗️⊱ *ACCIÓN MAL USADA* ⊱❗️⊱╮\n\nఌ︎ *DEBE DE USAR EL COMANDO COMO EN ESTE EJEMPLO:*\n${usedPrefix + command} *tu foto*`
+try {
+conn.reply(m.chat, '♫︎ *Enviando su música de Spotify*', m, {
+contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, showAdAttribution: true,
+title: packname,
+body: wm,
+previewType: 0, thumbnail: icons,
+sourceUrl: channel }}})
+m.react(rwait)
+let songInfo = await spotifyxv(text)
+if (!songInfo.length) throw `*No se encontró la canción*`
+let res = songInfo[0]
+let fileSizeInMB = (await getBuffer(res.url)).length / (1024 * 1024)
+let shortURL = await getTinyURL(res.url)
+const info = `❦︎ *TITULO:*
+_${res.name}_
 
-handler.register = true
+🝮︎︎︎︎ *ARTISTA:*
+» ${res.artista.join(', ')}
 
-export default handler 
+♫︎ *LINK:*
+» ${shortURL}
 
-function formatDate(n, locale = 'es') {
-let d = new Date(n)
-return d.toLocaleDateString(locale, {
-weekday: 'long',
-day: 'numeric',
-month: 'long',
-year: 'numeric'
-}) }*/
+☻︎ *Enviando Canción....*
+${global.wm}`
+
+let resImg = await fetch(res.imagen)
+let thumbb = await resImg.buffer()
+let { videos } = await search(res.name)
+let q = '128kbps'
+let v = videos[0].url
+let yt = await youtubedl(v).catch(async (_) => await youtubedlv2(v))
+let dl_url = await yt.audio[q].download()
+let ttl = await yt.title
+let size = await yt.audio[q].fileSizeH
+let img = await getBuffer(res.imagen)
+conn.sendMessage(m.chat, { audio: { url: dl_url }, fileName: `${ttl}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
+await conn.sendMessage(m.chat, {text: info, contextInfo: {forwardingScore: 9999999, isForwarded: true, "externalAdReply": {"showAdAttribution": true, "containsAutoReply": true, "renderLargerThumbnail": true, "title": global.wm, "containsAutoReply": true, "mediaType": 1, "thumbnail": img, "thumbnailUrl": img, "mediaUrl": shortURL, "sourceUrl": shortURL}}}, {quoted: fkontak});
+m.react(done)
+} catch (error) {
+}}
+handler.tags = ['descargas']
+handler.help = ['spotify']
+handler.group = true;
+handler.register = false
+handler.command = ['spotify','music']
+export default handler
