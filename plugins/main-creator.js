@@ -1,5 +1,5 @@
 function handler(m) {
-let name = conn.getName('595992667005@s.whatsapp.net')
+let name = conn.getName('593979133620@s.whatsapp.net')
 let ownerN = '595992667005'
 conn.sendContact(m.chat, [[`${ownerN}@s.whatsapp.net`, `${name}`]], m, {
  contextInfo: { 
