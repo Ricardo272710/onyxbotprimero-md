@@ -1,18 +1,25 @@
+//By JTxs  Ivanmods15
+// *[ ❀ PLAY ]*
 import fetch from 'node-fetch'
 
-let handler = async (m, { conn, text }) => {
-if (!text) throw '• Ingresa un enlace de YouTube.'
+let handler = async (m, { conn, command, text, usedPrefix }) => {
+if (!text) return conn.reply(m.chat, `Ingresa el nombre de la cancion que quieras buscar`, m)
+
 try {
-let res = await fetch(`https://api.diioffc.web.id/api/download/ytmp3?url=${encodeURIComponent(text)}`)
-let json = await res.json()
-if (json.status && json.result?.download?.url) {
-let { title, thumbnail, views, duration, author, download } = json.result
-let caption = `• *Título:* ${title}\n• *Canal:* ${author.name}\n• *Duración:* ${duration.timestamp}\n• *Vistas:* ${views.toLocaleString()}`
-await conn.sendMessage(m.chat, { image: { url: thumbnail }, caption }, { quoted: m })
-await conn.sendMessage(m.chat, { audio: { url: download.url }, mimetype: 'audio/mpeg', fileName: download.filename || 'audio.mp3' }, { quoted: m })
-} else throw 'No se pudo obtener el audio.'
-} catch (e) {
-m.reply(`❌ *Error:* Ocurrió un error desconocido`)
+let api = await fetch(`https://api.vreden.web.id/api/ytplaymp3?query=${text}`)
+let json = await api.json()
+let { title, thumbnail, timestamp, ago, views, author } = json.result.metadata
+let HS = `- *Titulo :* ${title}
+- *Duracion :* ${timestamp}
+- *Subido :* ${ago}
+- *Visitas :* ${views}
+- *Autor :* ${author.name}`
+await conn.sendFile(m.chat, thumbnail, 'HasumiBotFreeCodes.jpg', HS, m)
+await conn.sendFile(m.chat, json.result.download.url, 'HasumiBotFreeCodes.mp3', null, m)
+} catch (error) {
+console.error(error)
 }}
-handler.command = ['play']
+
+handler.command = /^(play)$/i
+
 export default handler
