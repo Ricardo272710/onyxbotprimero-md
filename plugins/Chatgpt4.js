@@ -32,7 +32,7 @@ let JT = { contextInfo: { externalAdReply: { title: 'Chatgpt - Ai', body: null, 
 console.error(error)
 }}
 
-HS.command = ['chatgpt4']
+HS.command = ['gpt4']
 
 export default HS
 //Dejen creditos 👀 [ By Jtxs ] https://whatsapp.com/channel/0029Vanjyqb2f3ERifCpGT0W
