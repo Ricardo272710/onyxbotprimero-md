@@ -1,43 +1,52 @@
-/* 
+/*
+Apple Music Download : Text and Url
+> Powered by i'm Fz and LyraX
 
-*❀ By JTxs*
-
-[ Canal Principal ] :
-https://whatsapp.com/channel/0029VaeQcFXEFeXtNMHk0D0n
-
-[ Canal Rikka Takanashi Bot ] :
-https://whatsapp.com/channel/0029VaksDf4I1rcsIO6Rip2X
-
-[ Canal StarlightsTeam] :
-https://whatsapp.com/channel/0029VaBfsIwGk1FyaqFcK91S
-
-[ HasumiBot FreeCodes ] :
-https://whatsapp.com/channel/0029Vanjyqb2f3ERifCpGT0W
+Free Code Titans;
+https://whatsapp.com/channel/0029ValMlRS6buMFL9d0iQ0S
 */
 
-// *[ ❀ SOUNDCLOUD PLAY  ]*
+const apikey = "Tesina"; // Obten una aquí: https://api.lyrax.net
+import fetch from "node-fetch";
 
-import fetch from 'node-fetch'
+let handler = async (m, { conn, text, command, usedPrefix }) => {
+  if (!text) throw `🌱 Ingresa un texto o URL para descargar. Ejemplo:\n\n${usedPrefix}applemusic Del Rio - Ed Maverick\n${usedPrefix}appledl <url>`;
 
-let handler = async (m, { conn, text }) => {
-if (!text) return conn.reply(m.chat, `❀ Ingresa el texto de la cancion que quieras buscar en soundcloud`, m)
-    
-try {
-let apiSearch = await fetch(`https://api.siputzx.my.id/api/s/soundcloud?query=${text}`)   
-let jsonSearch = await apiSearch.json()
-let { permalink_url:link } = jsonSearch.data[0]
+  try {
+    if (command === 'applemusic' || command === 'applem') {
+      let api = await fetch(`https://api.lyrax.net/api/search/apples?text=${text}&apikey=${apikey}`).then(res => res.json());
+      let dl = await fetch(`https://api.lyrax.net/api/dl/appledl?url=${api.data[0].song}&apikey=${apikey}`).then(res => res.json());
 
-let apiDL = await fetch(`https://api.siputzx.my.id/api/d/soundcloud?url=${link}`)
-let jsonDL = await apiDL.json()
-let { title, thumbnail, url } = jsonDL.data
+      let { datePublished, description, inAlbum: { url, name }, title, image, song } = { ...dl.metadata, ...api.data[0] };
 
-let aud = { audio: { url: url }, mimetype: 'audio/mp4', fileName: `${title}.mp3`, contextInfo: { externalAdReply: { showAdAttribution: true, mediaType: 2, mediaUrl: url, title: title, sourceUrl: null, thumbnail: await (await conn.getFile(thumbnail)).data }}}
+      let info = `
+        ⪩ AppleMusic - Download ⪨
+        
+        𖦹 🌱 Título : ${title}
+        𖦹 🗃️ Descripción : ${description}
+        𖦹 🔽 Publicado : ${datePublished}
+        𖦹 🔗 URL : ${song}
 
-await conn.sendMessage(m.chat, aud, { quoted: m })
+        𖦹 📦 Album : ${name}
+        𖦹 ☄️ Link : ${url}
+      `;
 
-} catch (error) {
-console.error(error)
-}}
+      conn.sendFile(m.chat, image, `${title}.jpg`, info, m);
+      await conn.sendMessage(m.chat, { audio: { url: dl.download }, mimetype: "audio/mpeg" }, m);
+      
+    } else if (command === 'applemdl' || command === 'appledl') {
+      let dl = await fetch(`https://api.lyrax.net/api/dl/appledl?url=${text}&apikey=${apikey}`).then(res => res.json());
+      await conn.sendMessage(m.chat, { audio: { url: dl.download }, mimetype: "audio/mpeg" }, m);
+      
+    } else {
+      throw `🌷 Comando no reconocido.`;
+    }
+  } catch (e) {
+    m.reply(`Ocurrió un error, inténtalo nuevamente.`);
+  }
+};
 
-handler.command = ['soundcloud', 'soundcloudplay']
-export default handler
+handler.help = handler.command = ['applemusic', 'applem', 'applemdl', 'appledl'];
+handler.tags = ['dl'];
+
+export default handler;
