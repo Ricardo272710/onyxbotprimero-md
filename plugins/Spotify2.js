@@ -1,124 +1,43 @@
 /* 
-- Power By Team Code Titans
-- https://whatsapp.com/channel/0029ValMlRS6buMFL9d0iQ0S 
+
+*❀ By JTxs*
+
+[ Canal Principal ] :
+https://whatsapp.com/channel/0029VaeQcFXEFeXtNMHk0D0n
+
+[ Canal Rikka Takanashi Bot ] :
+https://whatsapp.com/channel/0029VaksDf4I1rcsIO6Rip2X
+
+[ Canal StarlightsTeam] :
+https://whatsapp.com/channel/0029VaBfsIwGk1FyaqFcK91S
+
+[ HasumiBot FreeCodes ] :
+https://whatsapp.com/channel/0029Vanjyqb2f3ERifCpGT0W
 */
 
-// *`[🕯️ DOWNLOAD - DL SPOTIFY 🕯️]`*
+// *[ ❀ SOUNDCLOUD PLAY  ]*
 
-import axios from 'axios'
 import fetch from 'node-fetch'
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
+let handler = async (m, { conn, text }) => {
+if (!text) return conn.reply(m.chat, `❀ Ingresa el texto de la cancion que quieras buscar en soundcloud`, m)
+    
+try {
+let apiSearch = await fetch(`https://api.siputzx.my.id/api/s/soundcloud?query=${text}`)   
+let jsonSearch = await apiSearch.json()
+let { permalink_url:link } = jsonSearch.data[0]
 
-    if (!text) return conn.reply(m.chat, `🪼 Por favor proporciona el nombre de una canción o artista.`, m)
+let apiDL = await fetch(`https://api.siputzx.my.id/api/d/soundcloud?url=${link}`)
+let jsonDL = await apiDL.json()
+let { title, thumbnail, url } = jsonDL.data
 
-    try {
-        let songInfo = await spotifyxv(text)
-        if (!songInfo.length) throw `No se encontró la canción.`
-        let song = songInfo[0]
-        const res = await fetch(`https://archive-ui.tanakadomp.biz.id/download/spotify?url=${song.url}`)
+let aud = { audio: { url: url }, mimetype: 'audio/mp4', fileName: `${title}.mp3`, contextInfo: { externalAdReply: { showAdAttribution: true, mediaType: 2, mediaUrl: url, title: title, sourceUrl: null, thumbnail: await (await conn.getFile(thumbnail)).data }}}
 
-        if (!res.ok) throw `Error al obtener datos de la API, código de estado: ${res.status}`
+await conn.sendMessage(m.chat, aud, { quoted: m })
 
-        const data = await res.json().catch((e) => { 
-            console.error('Error parsing JSON:', e)
-            throw "Error al analizar la respuesta JSON."
-        })
+} catch (error) {
+console.error(error)
+}}
 
-        if (!data || !data.result || !data.result.data || !data.result.data.download) throw "No se pudo obtener el enlace de descarga."
-
-        const info = `🪼 *Descargando:* ${data.result.data.title}\n\n🪽 *Artista:* ${data.result.data.artis}\n🪸 *Álbum:* ${song.album}\n🪷 *Duración:* ${timestamp(data.result.data.durasi)}\n⛓️‍💥 *Enlace:* ${song.url}`
-
-        await conn.sendMessage(m.chat, { text: info, contextInfo: { forwardingScore: 9999999, isForwarded: true, 
-        externalAdReply: {
-            showAdAttribution: true,
-            containsAutoReply: true,
-            renderLargerThumbnail: true,
-            title: 'Spotify Music',
-            body: dev,
-            mediaType: 1,
-            thumbnailUrl: data.result.data.image,
-            mediaUrl: data.result.data.download,
-            sourceUrl: data.result.data.download
-        }}}, { quoted: m })
-
-        conn.sendMessage(m.chat, { audio: { url: data.result.data.download }, fileName: `${data.result.data.title}.mp3`, mimetype: 'audio/mp4', ptt: true }, { quoted: m })
-
-    } catch (e1) {
-        m.reply(`${e1.message || e1}`)
-    }
-}
-
-handler.help = ['spotify', 'music']
-handler.tags = ['downloader']
-handler.command = ['spotify2', 'music']
-handler.group = true
+handler.command = ['soundcloud', 'soundcloudplay']
 export default handler
-
-async function spotifyxv(query) {
-    let token = await tokens()
-    let response = await axios({
-        method: 'get',
-        url: 'https://api.spotify.com/v1/search?q=' + query + '&type=track',
-        headers: {
-            Authorization: 'Bearer ' + token
-        }
-    })
-    const tracks = response.data.tracks.items
-    const results = tracks.map((track) => ({
-        name: track.name,
-        artista: track.artists.map((artist) => artist.name),
-        album: track.album.name,
-        duracion: timestamp(track.duration_ms),
-        url: track.external_urls.spotify,
-        imagen: track.album.images.length ? track.album.images[0].url : ''
-    }))
-    return results
-}
-
-async function tokens() {
-    const response = await axios({
-        method: 'post',
-        url: 'https://accounts.spotify.com/api/token',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Basic ' + Buffer.from('acc6302297e040aeb6e4ac1fbdfd62c3:0e8439a1280a43aba9a5bc0a16f3f009').toString('base64')
-        },
-        data: 'grant_type=client_credentials'
-    })
-    return response.data.access_token
-}
-
-function timestamp(time) {
-    const minutes = Math.floor(time / 60000)
-    const seconds = Math.floor((time % 60000) / 1000)
-    return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
-}
-
-async function getBuffer(url, options) {
-    try {
-        options = options || {}
-        const res = await axios({
-            method: 'get',
-            url,
-            headers: {
-                DNT: 1,
-                'Upgrade-Insecure-Request': 1
-            },
-            ...options,
-            responseType: 'arraybuffer'
-        })
-        return res.data
-    } catch (err) {
-        return err
-    }
-}
-
-async function getTinyURL(text) {
-    try {
-        let response = await axios.get(`https://tinyurl.com/api-create.php?url=${text}`)
-        return response.data
-    } catch (error) {
-        return text
-    }
-}
