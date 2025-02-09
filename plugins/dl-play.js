@@ -1,6 +1,6 @@
 /* 
 
-❀ By JTxs
+*❀ By JTxs*
 
 [ Canal Principal ] :
 https://whatsapp.com/channel/0029VaeQcFXEFeXtNMHk0D0n
@@ -15,48 +15,35 @@ https://whatsapp.com/channel/0029VaBfsIwGk1FyaqFcK91S
 https://whatsapp.com/channel/0029Vanjyqb2f3ERifCpGT0W
 */
 
-// $ npm i btch-downloader
-// Package : "btch-downloader": "^2.3.2",
 // *[ ❀ PLAY ]*
-
-import { youtube } from 'btch-downloader'
+import fetch from 'node-fetch';
 import yts from 'yt-search'
-import axios from 'axios'
 
-let handler = async (m, { conn, text, usedPrefix, command }) => {
+let HS = async (m, { conn, text }) => {
 if (!text) return conn.reply(m.chat, `❀ Ingresa el texto de lo que quieres buscar`, m)
+let res = await yts(text)
+let vid = res.videos[0]
 
 try {
-let ytsres = await yts(text)
-let video = ytsres.videos[0]
 
-if (!video) return conn.reply(m.chat, `❀ Sin resultados obtenidos :(`, m)
+let api = await fetch(`https://api.betabotz.eu.org/api/download/ytmp4?url=${vid.url}&apikey=btzKiyoEditz`)
+let json = await api.json()
+let { title, description, id, thumb, source, mp3, mp4 } = json.result
+let audio = {
+audio: { url: mp3 }, mimetype: "audio/mp4", fileName: `${title}`,
+contextInfo: { externalAdReply: { showAdAttribution: true, mediaType: 2,
+mediaUrl: vid.url, sourceUrl: vid.url,
+title: vid.title, body: null,
+thumbnailUrl: thumb
+}}}
+await conn.sendMessage(m.chat, audio, { quoted: m })
 
-let { title, duration, views, ago, author, thumbnail, url } = video
-let HS = `- *Titulo :* ${title}
-- *Duracion :* ${duration.timestamp}
-- *Visitas :* ${views.toLocaleString()}
-- *Subido :* ${ago}
-- *Autor :* ${author.name}`
-
- 
-await conn.sendMessage(m.chat, {text: HS,
-contextInfo: { externalAdReply: {
-title: `${title}`, body: `${author.name}`,
-thumbnailUrl: thumbnail, sourceUrl: url,
-mediaType: 1, renderLargerThumbnail: true
-}}}, { quoted: m })
-
-let data = await youtube(url)
-
-if (!data || !data.mp3) return conn.reply(m.chat, `❀ Descarga fallida :(`, m)
-
-await conn.sendMessage(m.chat, { audio: { url: data.mp3 }, mimetype: 'audio/mpeg', }, { quoted: m })
-//data.mp4 para video :v
+await conn.sendMessage(m.chat, { video: { url: mp4 }, mimetype: 'video/mp4', fileName: `${title}.mp4`, caption: null }, { quoted: m })    
+    
 } catch (error) {
 console.error(error)
 }}
 
-handler.command = ['play']
+HS.command = ['play']
 
-export default handler
+export default HS
