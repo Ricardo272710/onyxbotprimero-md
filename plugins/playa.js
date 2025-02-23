@@ -29,6 +29,6 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     conn.reply(m.chat, '❌ Hubo un error al procesar la solicitud.', m)
   }
 }
-handler.command = ['play3']
+handler.command = ['sound']
 
 export default handler
