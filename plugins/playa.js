@@ -1,49 +1,34 @@
 /* 
-
-[ Canal Principal ] :
-https://whatsapp.com/channel/0029VaeQcFXEFeXtNMHk0D0n
-
-[ Canal Rikka Takanashi Bot ] :
-https://whatsapp.com/channel/0029VaksDf4I1rcsIO6Rip2X
-
-[ Canal StarlightsTeam] :
-https://whatsapp.com/channel/0029VaBfsIwGk1FyaqFcK91S
-
-[ HasumiBot FreeCodes ] :
-https://whatsapp.com/channel/0029Vanjyqb2f3ERifCpGT0W
+- Código Creado Por Izumi-kzx
+- Power By Team Code Titans
+- https://whatsapp.com/channel/0029ValMlRS6buMFL9d0iQ0S
 */
-
-// [ ❀ PLAY 2 (video) ]
+// [ 🍟 SOUND CLOUD SEARCH ]
 import fetch from 'node-fetch'
-import yts from 'yt-search'
 
-let handler = async (m, { conn, text, args }) => {
-if (!text) {
-return m.reply("❀ ingresa un texto de lo que quieres buscar")
+let handler = async (m, { conn, args, usedPrefix, command }) => {
+  if (!args.length) return conn.reply(m.chat, 🔍 *Por favor escribe una canción a buscar.*\nEjemplo: ${usedPrefix}${command} Avión Privado, m)
+  const query = args.join(' ')
+  try {
+    const response = await fetch(https://api.agungny.my.id/api/soundclouds?q=${encodeURIComponent(query)})
+    const data = await response.json()
+    
+    if (!data.status || !data.result || data.result.length === 0) {
+      return conn.reply(m.chat, 🚫 No se encontraron resultados para "${query}"., m)
+    }
+    
+    let txt = '🎵 S E A R C H - S O U N D C L O U D\n\n'
+    data.result.forEach(track => {
+      txt += 🎶 *Título*: ${track.title}\n
+      txt += 🔗 *Enlace*: ${track.url}\n\n---------------------------------------------------\n\n
+    })
+    
+    await conn.reply(m.chat, txt.trim(), m)
+  } catch (error) {
+    console.error(error)
+    conn.reply(m.chat, '❌ Hubo un error al procesar la solicitud.', m)
+  }
 }
-    
-let ytres = await search(args.join(" "))
-let txt = `- Título : ${ytres[0].title}
-- Duración : ${ytres[0].timestamp}
-- Publicado : ${ytres[0].ago}
-- Canal : ${ytres[0].author.name || 'Desconocido'}
-- Url : ${'https://youtu.be/' + ytres[0].videoId}`
-await conn.sendFile(m.chat, ytres[0].image, 'thumbnail.jpg', txt, m)
-    
-try {
-let api = await fetch(https://api.giftedtech.my.id/api/download/dlmp4?apikey=gifted&url=${ytres[0].url})
-let json = await api.json()
-let { quality, title, download_url } = json.result
-await conn.sendMessage(m.chat, { video: { url: download_url }, caption: ${title}, mimetype: 'video/mp4', fileName: ${title} + .mp4}, {quoted: m })
-} catch (error) {
-console.error(error)
-}}
-
-handler.command = /^(play2 , vid)$/i
+handler.command = ['play3']
 
 export default handler
-
-async function search(query, options = {}) {
-  let search = await yts.search({ query, hl: "es", gl: "ES", ...options })
-  return search.videos
-}
