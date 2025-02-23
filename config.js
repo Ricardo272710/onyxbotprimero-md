@@ -44,9 +44,9 @@ global.APIKeys = { // APIKey Here
   'https://api.fgmods.xyz': `${fgkey}` //--- 100 de límite diario --- Regístrese en https://api.fgmods.xyz/
 }
 // Sticker WM
-global.packname = 'Fn Bot' 
-global.author = `Fn Bot`
-global.wm = 'Fn Bot'
+global.packname = 'ONYX-BOT' 
+global.author = `ONYX-BOT`
+global.wm = 'ONYX-BOT'
 
 global.insta = ''
 	
@@ -55,7 +55,7 @@ global.imagen0 = fs.readFileSync('./src/Sylph_logo.jpg');
 global.imagen = fs.readFileSync('./src/Sylph.jpg');
 global.imagen3 = '';
 //--info
-global.botName = 'Fn Bot'
+global.botName = 'ONYX-BOT'
 global.fglog = '' 
 global.link_ = ''
 
