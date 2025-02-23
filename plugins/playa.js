@@ -32,7 +32,7 @@ await m.react('✖️');
 
 handler.help = ['play <búsqueda>']
 handler.tags = ['downloader']
-handler.command = ['play']
+handler.command = ['play3']
 
 export default handler
 
