@@ -5,7 +5,7 @@ if (new Date - global.db.data.users[m.sender].lastcofre < 0) throw `[❗𝐈𝐍
 let img = 'https://qu.ax/kZXbF.jpeg' 
 let texto = `» BIENVENIDO QUERIDO USUARIO!
 
-“ HOLA *, ESTE ES EL MENU DE FN-BOT 🤖 "
+“ HOLA *, ESTE ES EL MENU DE Onyx-BOT 🤖 "
 
 EN QUE PUEDO SERVIRTE!! ”
 
